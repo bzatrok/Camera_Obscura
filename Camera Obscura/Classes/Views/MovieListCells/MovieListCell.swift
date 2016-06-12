@@ -29,4 +29,16 @@ class MovieListCell: UITableViewCell
     //MARK: IBActions
     
     //MARK: Initialization
+    
+    func setBackgroundImage(forPosterURL posterURL: String)
+    {
+        RequestManager.sharedInstance.fetchImage(posterURL) { success, responseImage in
+            
+            guard let responseImage = responseImage where success else
+            {
+                return
+            }
+            self.backgroundImageView.image = responseImage
+        }
+    }
 }

@@ -24,6 +24,8 @@ class MovieListViewController: UIViewController
     
     private var selectedMovie               : Movie?
     
+    private let loadingIndicator            = LoadingIndicator.createLoadingIndicator()
+    
     //MARK: IBOutlets
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -91,9 +93,9 @@ class MovieListViewController: UIViewController
         moviesList = []
         tableView.reloadData()
         
+        presentViewController(loadingIndicator, animated: true, completion: nil)
+        
         RequestManager.sharedInstance.queryMovies(withTitleLike: searchString, forPage: currentPageToFetch) { success, responseMovieList in
-            
-            LoadingIndicator.show()
             
             if let responseMovieList = responseMovieList
             {
@@ -101,6 +103,10 @@ class MovieListViewController: UIViewController
                 self.currentPageToFetch             += 1
                 self.moviesList.appendContentsOf(responseMovieList)
                 self.reloadTableView()
+            }
+            else
+            {
+                self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
             }
         }
     }
@@ -122,7 +128,7 @@ class MovieListViewController: UIViewController
         tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
         tableView.endUpdates()
         
-        LoadingIndicator.dismiss()
+        loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
         
         tableView.layoutIfNeeded()
     }
@@ -178,6 +184,7 @@ extension MovieListViewController: UITableViewDelegate
                 if let responseMovie = responseMovie where success
                 {
                     self.selectedMovie = responseMovie
+                    self.view.findFirstResponder()?.resignFirstResponder()
                     self.performSegueWithIdentifier(self.movieDetailSeque, sender: self)
                 }
             }
@@ -234,12 +241,12 @@ extension MovieListViewController: UITableViewDataSource
                 
                 cell!.titleLabel.text = movie.title
                 
-                guard let posterURL = movie.posterURL, URL = NSURL(string: posterURL), let data = NSData(contentsOfURL:URL) else
+                guard let posterURL = movie.posterURL else
                 {
                     return cell!
                 }
                 
-                cell!.backgroundImageView.image = UIImage(data:data)
+                cell!.setBackgroundImage(forPosterURL: posterURL)
                 
                 return cell!
         }

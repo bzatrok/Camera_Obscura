@@ -12,40 +12,13 @@ class LoadingIndicator: UIAlertController
 {
     //MARK: Variables
     
-    static let alertViewTag = 12345
-    
     //MARK: Functions
     
-    class func show()
+    class func createLoadingIndicator() -> UIAlertController
     {
-        let alertView           = UIAlertController(title: "", message: "", preferredStyle: .Alert)
-        let activityIndicator   = UIActivityIndicatorView(frame: alertView.view.bounds)
+        let loadingString       = NSLocalizedString("loading", comment: "loading indicator title")
+        let loadingIndicator    = UIAlertController(title: loadingString, message: nil, preferredStyle: .Alert)
         
-        guard let window = UIApplication.sharedApplication().windows.first else
-        {
-            return
-        }
-        
-        alertView.view.addSubview(activityIndicator)
-        activityIndicator.userInteractionEnabled = false
-        activityIndicator.startAnimating()
-        alertView.view.tag = alertViewTag
-        window.addSubview(alertView.view)
-    }
-    
-    class func dismiss()
-    {
-        guard let window = UIApplication.sharedApplication().windows.first else
-        {
-            return
-        }
-        
-        for subview in window.subviews
-        {
-            if subview.tag == alertViewTag
-            {
-                subview.removeFromSuperview()
-            }
-        }
+        return loadingIndicator
     }
 }

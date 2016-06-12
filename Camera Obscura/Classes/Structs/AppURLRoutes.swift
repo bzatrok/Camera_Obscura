@@ -18,6 +18,7 @@ struct AppURLRoutes
     
     static func similarTitleSearchUrl(withSearchString searchString: String, forPage: Int) -> String
     {
-        return "\(AppURLRoutes.similarTitleSearchURL)\(searchString)\(AppURLRoutes.paginationPostFix)\(forPage)"
+        let searchArray = searchString.stringByReplacingOccurrencesOfString(" ", withString: "-")
+        return "\(AppURLRoutes.similarTitleSearchURL)\(searchArray)\(AppURLRoutes.paginationPostFix)\(forPage)"
     }
 }

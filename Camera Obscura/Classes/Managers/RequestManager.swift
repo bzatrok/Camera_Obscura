@@ -19,6 +19,34 @@ class RequestManager
     
     //MARK: Functions
     
+    //IMAGES
+    
+    func fetchImage(fromURLString: String, completion: (success: Bool, responseImage: UIImage?) -> Void)
+    {
+        guard let URL = NSURL(string: fromURLString) else
+        {
+            completion(success: false, responseImage: nil)
+            return
+        }
+        let request = NSURLRequest(URL: URL)
+        let session = NSURLSession.sharedSession()
+        let task    = session.dataTaskWithRequest(request) { data, response, error in
+            
+            guard error == nil, let data = data else
+            {
+                completion(success: false, responseImage: nil)
+                return
+            }
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                let image = UIImage(data: data)
+                completion(success: true, responseImage: image)
+            }
+        }
+        task.resume()
+    }
+    
     //MOVIE
     
     /**
@@ -122,18 +150,27 @@ class RequestManager
             
             do
             {
-                guard let moviesDict = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject],
-                    moviesArray = moviesDict["Search"] as? [[String : AnyObject]] else
+                guard let moviesDict = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject] else
                 {
                     print("error trying to convert data to JSON")
                     completion(success: false, responseMovieList: nil)
                     return
                 }
                 
-                let movieList = PersistenceManager.sharedInstance.saveMovies(fromMovieArray: moviesArray)
-                
-                completion(success: true, responseMovieList: movieList)
-                
+                if let moviesArray = moviesDict["Search"] as? [[String : AnyObject]]
+                {
+                    let movieList = PersistenceManager.sharedInstance.saveMovies(fromMovieArray: moviesArray)
+                    completion(success: true, responseMovieList: movieList)
+                }
+                else
+                {
+                    guard let movie = PersistenceManager.sharedInstance.saveMovie(fromMovieDictionary: moviesDict) else
+                    {
+                        completion(success: false, responseMovieList: nil)
+                        return
+                    }
+                    completion(success: true, responseMovieList: [movie])
+                }
             }
             catch
             {
