@@ -12,5 +12,34 @@ import CoreData
 
 class Movie: NSManagedObject
 {
-    // Insert code here to add functionality to your managed object subclass
+    var infoDictArray : [[String : String]] {
+        
+        guard let year = year,
+            runtime = runtime,
+            genre = genre,
+            director = director,
+            writer = writer,
+            actors = actors,
+            plot = plot,
+            language = language,
+            country = country,
+            awards = awards,
+            imdbRating = imdbRating else
+        {
+            return [[:]]
+        }
+        
+        return [["Released" : year],
+                ["Plot" : plot],
+                ["Genre" : genre],
+                ["IMDB Rating" : imdbRating],
+                ["Director" : director],
+                ["Writer" : writer],
+                ["Actors" : actors],
+                ["Runtime" : runtime],
+                ["Language" : language],
+                ["Counry" : country],
+                ["Awards" : awards],
+        ]
+    }
 }

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		242833E01D0D808800C289CD /* MovieListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242833DF1D0D808800C289CD /* MovieListCell.swift */; };
+		242833E21D0D81DA00C289CD /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242833E11D0D81DA00C289CD /* MovieDetailViewController.swift */; };
+		242833E61D0D82B700C289CD /* MovieDetailHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242833E51D0D82B700C289CD /* MovieDetailHeaderCell.swift */; };
+		242833E81D0D82D000C289CD /* MovieDetailDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242833E71D0D82D000C289CD /* MovieDetailDescriptionCell.swift */; };
 		245AD5161D0D5CD90071C34A /* Camera-Obscura.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 245AD5141D0D5CD90071C34A /* Camera-Obscura.xcdatamodeld */; };
 		245AD51A1D0D5DF20071C34A /* Movie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AD5181D0D5DF20071C34A /* Movie+CoreDataProperties.swift */; };
 		245AD51B1D0D5DF20071C34A /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AD5191D0D5DF20071C34A /* Movie.swift */; };
@@ -25,6 +29,10 @@
 /* Begin PBXFileReference section */
 		09CB2F8DCAFFA88DD8E2D9D5 /* Pods_Camera_Obscura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Camera_Obscura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		101EBC2F213353CA0898D09C /* Pods-Camera Obscura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Camera Obscura.release.xcconfig"; path = "Pods/Target Support Files/Pods-Camera Obscura/Pods-Camera Obscura.release.xcconfig"; sourceTree = "<group>"; };
+		242833DF1D0D808800C289CD /* MovieListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieListCell.swift; path = Classes/Views/MovieListCells/MovieListCell.swift; sourceTree = "<group>"; };
+		242833E11D0D81DA00C289CD /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieDetailViewController.swift; path = Classes/Controllers/MovieDetailViewController.swift; sourceTree = "<group>"; };
+		242833E51D0D82B700C289CD /* MovieDetailHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieDetailHeaderCell.swift; path = Classes/Views/MovieDetailCells/MovieDetailHeaderCell.swift; sourceTree = "<group>"; };
+		242833E71D0D82D000C289CD /* MovieDetailDescriptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieDetailDescriptionCell.swift; path = Classes/Views/MovieDetailCells/MovieDetailDescriptionCell.swift; sourceTree = "<group>"; };
 		245AD5151D0D5CD90071C34A /* Camera-Obscura.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Camera-Obscura.xcdatamodel"; sourceTree = "<group>"; };
 		245AD5181D0D5DF20071C34A /* Movie+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+CoreDataProperties.swift"; path = "Classes/Models/Movie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		245AD5191D0D5DF20071C34A /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Movie.swift; path = Classes/Models/Movie.swift; sourceTree = "<group>"; };
@@ -60,6 +68,23 @@
 				09CB2F8DCAFFA88DD8E2D9D5 /* Pods_Camera_Obscura.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		242833E31D0D829500C289CD /* MovieListCells */ = {
+			isa = PBXGroup;
+			children = (
+				242833DF1D0D808800C289CD /* MovieListCell.swift */,
+			);
+			name = MovieListCells;
+			sourceTree = "<group>";
+		};
+		242833E41D0D829A00C289CD /* MovieDetailCells */ = {
+			isa = PBXGroup;
+			children = (
+				242833E51D0D82B700C289CD /* MovieDetailHeaderCell.swift */,
+				242833E71D0D82D000C289CD /* MovieDetailDescriptionCell.swift */,
+			);
+			name = MovieDetailCells;
 			sourceTree = "<group>";
 		};
 		245AD5101D0D5C880071C34A /* Models */ = {
@@ -159,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				24EBF2441D0D58C5000529F5 /* MovieListViewController.swift */,
+				242833E11D0D81DA00C289CD /* MovieDetailViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -166,6 +192,8 @@
 		24EBF2571D0D58FC000529F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				242833E41D0D829A00C289CD /* MovieDetailCells */,
+				242833E31D0D829500C289CD /* MovieListCells */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -311,14 +339,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				242833E01D0D808800C289CD /* MovieListCell.swift in Sources */,
 				245AD5251D0D61D70071C34A /* AppURLRoutes.swift in Sources */,
 				245AD51A1D0D5DF20071C34A /* Movie+CoreDataProperties.swift in Sources */,
 				24EBF2451D0D58C5000529F5 /* MovieListViewController.swift in Sources */,
 				24EBF2431D0D58C5000529F5 /* AppDelegate.swift in Sources */,
 				245AD5231D0D61C90071C34A /* AppConstants.swift in Sources */,
 				245AD51E1D0D5E180071C34A /* PersistenceManager.swift in Sources */,
+				242833E81D0D82D000C289CD /* MovieDetailDescriptionCell.swift in Sources */,
 				245AD5201D0D5E200071C34A /* RequestManager.swift in Sources */,
 				245AD5161D0D5CD90071C34A /* Camera-Obscura.xcdatamodeld in Sources */,
+				242833E21D0D81DA00C289CD /* MovieDetailViewController.swift in Sources */,
+				242833E61D0D82B700C289CD /* MovieDetailHeaderCell.swift in Sources */,
 				245AD51B1D0D5DF20071C34A /* Movie.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

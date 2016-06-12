@@ -25,7 +25,7 @@ class PersistenceManager
     //SAVE
     
     /**
-     Saves a single movie objects, extracted from a dictionary
+     Saves a single movie object, extracted from a dictionary. Check for existing records to update, otherwise saves fresh object
      
      - parameter dictionary: The dictionary that contains the movie object's data
      */
@@ -37,43 +37,104 @@ class PersistenceManager
         }
         let moc = appDelegate.managedObjectContext
         
-        guard let entity = NSEntityDescription.entityForName(AppConstants.Models.MovieModelName, inManagedObjectContext:moc) else
+        guard let entity = NSEntityDescription.entityForName(AppConstants.Models.MovieModelName, inManagedObjectContext:moc), imdbID =  movieDictionary["imdbID"] as? String else
         {
             return nil
         }
         
-        let movie = Movie(entity: entity, insertIntoManagedObjectContext: moc)
-        
-        movie.title         = movieDictionary["Title"] as? String
-        movie.year          = movieDictionary["Year"] as? String
-        movie.rated         = movieDictionary["Rated"] as? String
-        movie.released      = movieDictionary["Released"] as? String
-        movie.runtime       = movieDictionary["Runtime"] as? String
-        movie.genre         = movieDictionary["Genre"] as? String
-        movie.director      = movieDictionary["Director"] as? String
-        movie.writer        = movieDictionary["Writer"] as? String
-        movie.actors        = movieDictionary["Actors"] as? String
-        movie.plot          = movieDictionary["Plot"] as? String
-        movie.language      = movieDictionary["Language"] as? String
-        movie.country       = movieDictionary["Country"] as? String
-        movie.awards        = movieDictionary["Awards"] as? String
-        movie.posterURL     = movieDictionary["Poster"] as? String
-        movie.metascore     = movieDictionary["Metascore"] as? String
-        movie.imdbRating    = movieDictionary["imdbRating"] as? String
-        movie.imdbVotes     = movieDictionary["imdbVotes"] as? String
-        movie.imdbID        = movieDictionary["Title"] as? String
-        movie.type          = movieDictionary["Type"] as? String
+        if let movie = fetchMovie(withIMDBID: imdbID)
+        {
+            return fillAndSaveMovie(fromDictionary: movieDictionary, withMovieObject: movie, inManagedObjectContext: moc)
+        }
+        else
+        {
+            let movie = Movie(entity: entity, insertIntoManagedObjectContext: moc)
+            return fillAndSaveMovie(fromDictionary: movieDictionary, withMovieObject: movie, inManagedObjectContext: moc)
+        }
+    }
+    
+    /**
+     Updates data of passed Movie object with data from dictionary in provided MOC
+    
+     - parameter dictionary:             dictionary with movie object data
+     - parameter withMovieObject:        movie object to update
+     - parameter inManagedObjectContext: provided managed object context
+     
+     - returns: A single optional Movie object
+     */
+    private func fillAndSaveMovie(fromDictionary dictionary: [String : AnyObject], withMovieObject: Movie, inManagedObjectContext: NSManagedObjectContext) -> Movie?
+    {
+        addData(fromDictonary: dictionary, toMovieObject: withMovieObject)
         
         do
         {
-            try moc.save()
-            return movie
+            try inManagedObjectContext.save()
+            print("Saved Movie with Title: \(withMovieObject.title)")
+            return withMovieObject
         }
         catch
         {
             print("Saving movie failed")
             return nil
         }
+    }
+    
+    /**
+     Adds data to passed Movie object with data from dictionary
+     
+     - parameter movieDictionary: dictionary, source of movie object data
+     - parameter toMovieObject:   Movie object, destination of data
+     
+     - returns: A single optional Movie object
+     */
+    private func addData(fromDictonary movieDictionary: [String : AnyObject], toMovieObject: Movie) -> Movie?
+    {
+        guard let title = movieDictionary["Title"] as? String,
+                year = movieDictionary["Year"] as? String,
+                posterURL = movieDictionary["Poster"] as? String,
+                imdbID = movieDictionary["imdbID"] as? String,
+                type = movieDictionary["Type"] as? String else
+        {
+            return nil
+        }
+        
+        toMovieObject.title         = title
+        toMovieObject.year          = year
+        toMovieObject.posterURL     = posterURL
+        toMovieObject.imdbID        = imdbID
+        toMovieObject.type          = type
+        
+        if let rated = movieDictionary["Rated"] as? String,
+            released = movieDictionary["Released"] as? String,
+            runtime = movieDictionary["Runtime"] as? String,
+            genre = movieDictionary["Genre"] as? String,
+            director = movieDictionary["Director"] as? String,
+            writer = movieDictionary["Writer"] as? String,
+            actors = movieDictionary["Actors"] as? String,
+            plot = movieDictionary["Plot"] as? String,
+            language = movieDictionary["Language"] as? String,
+            country = movieDictionary["Country"] as? String,
+            awards = movieDictionary["Awards"] as? String,
+            metascore = movieDictionary["Metascore"] as? String,
+            imdbRating = movieDictionary["imdbRating"] as? String,
+            imdbVotes = movieDictionary["imdbVotes"] as? String
+        {
+            toMovieObject.rated         = rated
+            toMovieObject.released      = released
+            toMovieObject.runtime       = runtime
+            toMovieObject.genre         = genre
+            toMovieObject.director      = director
+            toMovieObject.writer        = writer
+            toMovieObject.actors        = actors
+            toMovieObject.plot          = plot
+            toMovieObject.language      = language
+            toMovieObject.country       = country
+            toMovieObject.awards        = awards
+            toMovieObject.metascore     = metascore
+            toMovieObject.imdbRating    = imdbRating
+            toMovieObject.imdbVotes     = imdbVotes
+        }
+        return toMovieObject
     }
     
     /**
@@ -106,7 +167,7 @@ class PersistenceManager
      
      - returns: Returns an optional Movie object
      */
-    func fetchMovies(withIMDBID imdbID: String) -> Movie?
+    func fetchMovie(withIMDBID imdbID: String) -> Movie?
     {
         let predicate = NSPredicate(format: "imdbID == %@", imdbID)
         
