@@ -19,6 +19,13 @@ class MovieListCell: UITableViewCell
     
     //MARK: Life-cycle
     
+    override func awakeFromNib()
+    {
+        super.awakeFromNib()
+        
+        backgroundImageView.contentMode = .ScaleAspectFill
+    }
+    
     //MARK: IBActions
     
     //MARK: Initialization

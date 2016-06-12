@@ -18,12 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="TC2-oZ-umJ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BSa-a6-SY1">
-                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                                <rect key="frame" x="0.0" y="108" width="320" height="460"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MovieListCell" rowHeight="100" id="PmP-5a-pU3" customClass="MovieListCell" customModule="Camera_Obscura" customModuleProvider="target">
@@ -71,6 +67,10 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="TC2-oZ-umJ">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -78,8 +78,8 @@
                             <constraint firstAttribute="trailing" secondItem="BSa-a6-SY1" secondAttribute="trailing" id="6au-3v-x5W"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="BSa-a6-SY1" secondAttribute="bottom" id="O52-Wc-Qnu"/>
                             <constraint firstItem="BSa-a6-SY1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QfR-uS-qpg"/>
+                            <constraint firstItem="TC2-oZ-umJ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="SLn-YK-FK3"/>
                             <constraint firstAttribute="trailing" secondItem="TC2-oZ-umJ" secondAttribute="trailing" id="d0g-QA-fKu"/>
-                            <constraint firstItem="TC2-oZ-umJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="mTH-0h-M11"/>
                             <constraint firstItem="TC2-oZ-umJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="qP9-ok-JOi"/>
                         </constraints>
                     </view>
@@ -94,10 +94,10 @@
             </objects>
             <point key="canvasLocation" x="425" y="417"/>
         </scene>
-        <!--View Controller-->
+        <!--Movie Detail View Controller-->
         <scene sceneID="SQc-ST-QJB">
             <objects>
-                <viewController id="Fg5-DY-Hjz" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MovieDetailViewController" id="Fg5-DY-Hjz" customClass="MovieDetailViewController" customModule="Camera_Obscura" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="A6w-uQ-VIe"/>
                         <viewControllerLayoutGuide type="bottom" id="LQn-uI-amk"/>
@@ -201,6 +201,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="3Ry-Sa-DLT"/>
+                    <connections>
+                        <outlet property="tableView" destination="Kp4-HS-0PY" id="l4t-Nm-5PT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wjZ-xh-SaC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

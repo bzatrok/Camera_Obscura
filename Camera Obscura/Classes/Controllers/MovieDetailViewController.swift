@@ -12,7 +12,7 @@ class MovieDetailViewController: UIViewController
 {
     //MARK: Variables
     
-    var selectedMovie : Movie!
+    var selectedMovie               : Movie!
     
     private let headerCellHeight    : CGFloat = 150
     private let headerCellID        = "MovieDetailHeaderCell"
@@ -23,6 +23,8 @@ class MovieDetailViewController: UIViewController
     private let emptyCellID         = "emptyCell"
     
     //MARK: IBOutlets
+    
+    @IBOutlet weak var tableView: UITableView!
     
     //MARK: Enums
     
@@ -47,6 +49,7 @@ class MovieDetailViewController: UIViewController
         super.viewDidLoad()
         
         setupView()
+        setupDelegation()
     }
     
     //MARK: IBActions
@@ -58,7 +61,23 @@ class MovieDetailViewController: UIViewController
      */
     private func setupView()
     {
-        //
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: AppColors.greyTextColor]
+        navigationController?.navigationBar.tintColor           =  AppColors.greyTextColor
+        
+        guard let title = selectedMovie.title else
+        {
+            return
+        }
+        navigationItem.title = title
+    }
+    
+    /**
+     Sets up required delegates
+     */
+    private func setupDelegation()
+    {
+        tableView.delegate      = self
+        tableView.dataSource    = self
     }
 }
 

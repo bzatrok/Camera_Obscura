@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  Camera Obscura
+
+  Created by Bence Zátrok on 12/06/16.
+  Copyright © 2016 Root. All rights reserved.
+*/
+
+//Language: English
+
+"movieListTitle"    = "Movie Search";
+"loading"           = "Loading...";

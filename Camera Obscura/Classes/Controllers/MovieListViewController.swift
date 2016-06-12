@@ -51,6 +51,7 @@ class MovieListViewController: UIViewController
         super.viewDidLoad()
         
         setupView()
+        setupDelegation()
     }
 
     //MARK: IBActions
@@ -62,12 +63,37 @@ class MovieListViewController: UIViewController
      */
     private func setupView()
     {
-        //
+        edgesForExtendedLayout                  = .None
+//        automaticallyAdjustsScrollViewInsets    = false
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: AppColors.greyTextColor]
+        navigationController?.navigationBar.tintColor           =  AppColors.greyTextColor
+        navigationItem.title                                    = NSLocalizedString("movieListTitle", comment: "navigation bar title in movie list view")
     }
     
+    /**
+     Sets up required delegates
+     */
+    private func setupDelegation()
+    {
+        tableView.delegate      = self
+        tableView.dataSource    = self
+        searchBar.delegate      = self
+    }
+    
+    /**
+     Clears previous results, fetches movies based on the entered search string
+     
+     - parameter searchString: String entered into searchbar
+     */
     private func fetchMovies(withSearchString searchString: String)
     {
+        moviesList = []
+        tableView.reloadData()
+        
         RequestManager.sharedInstance.queryMovies(withTitleLike: searchString, forPage: currentPageToFetch) { success, responseMovieList in
+            
+            LoadingIndicator.show()
             
             if let responseMovieList = responseMovieList
             {
@@ -79,19 +105,26 @@ class MovieListViewController: UIViewController
         }
     }
     
+    /**
+     Reloads tableview by inserting rows of movie results
+     */
     private func reloadTableView()
     {
         var indexPaths = [NSIndexPath]()
         
         for index in moviesListCountBeforeUpdate ..< self.moviesList.count
         {
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            let indexPath = NSIndexPath(forRow: index, inSection: MovieTableSection.List.rawValue)
             indexPaths.append(indexPath)
         }
     
         tableView.beginUpdates()
         tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
         tableView.endUpdates()
+        
+        LoadingIndicator.dismiss()
+        
+        tableView.layoutIfNeeded()
     }
 
     //MARK: Functions
@@ -111,6 +144,20 @@ class MovieListViewController: UIViewController
 
 //MARK: EXTENSIONS
 
+extension MovieListViewController: UISearchBarDelegate
+{
+    func searchBarSearchButtonClicked(searchBar: UISearchBar)
+    {
+        guard let searchString = searchBar.text else
+        {
+            return
+        }
+        
+        searchBar.resignFirstResponder()
+        fetchMovies(withSearchString: searchString)
+    }
+}
+
 //MARK: UITableViewDelegate
 
 extension MovieListViewController: UITableViewDelegate
@@ -122,8 +169,19 @@ extension MovieListViewController: UITableViewDelegate
             return
         }
         
-        selectedMovie = moviesList[indexPath.row]
-        performSegueWithIdentifier(movieDetailSeque, sender: self)
+        let movieToQuery = moviesList[indexPath.row]
+        
+        if let imdbID = movieToQuery.imdbID
+        {
+            RequestManager.sharedInstance.queryMovie(withImdbID: imdbID) { success, responseMovie in
+                
+                if let responseMovie = responseMovie where success
+                {
+                    self.selectedMovie = responseMovie
+                    self.performSegueWithIdentifier(self.movieDetailSeque, sender: self)
+                }
+            }
+        }
     }
 }
 
@@ -171,6 +229,17 @@ extension MovieListViewController: UITableViewDataSource
                 {
                     cell = MovieListCell(style: .Default, reuseIdentifier: movieCellID)
                 }
+                
+                let movie = moviesList[indexPath.row]
+                
+                cell!.titleLabel.text = movie.title
+                
+                guard let posterURL = movie.posterURL, URL = NSURL(string: posterURL), let data = NSData(contentsOfURL:URL) else
+                {
+                    return cell!
+                }
+                
+                cell!.backgroundImageView.image = UIImage(data:data)
                 
                 return cell!
         }

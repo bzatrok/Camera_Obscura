@@ -45,16 +45,25 @@ class RequestManager
      - parameter exactTitle: Searchstring to pass into URL
      - parameter completion: completion block with success bool and optinal JSON return
      */
-    func queryMovies(withExactTitle exactTitle: String, completion: (success: Bool, responseMovieList: [Movie]?) -> Void)
+    func queryMovie(withExactTitle exactTitle: String, completion: (success: Bool, responseMovie: Movie?) -> Void)
     {
         guard exactTitle.characters.count > 1 else
         {
-            completion(success: false, responseMovieList: nil)
+            completion(success: false, responseMovie: nil)
             return
         }
         
         let URLstring = "\(AppURLRoutes.exactTitleSearchURL)\(exactTitle)"
-        queryMovies(withURLString: URLstring, completion: completion)
+        
+        queryMovies(withURLString: URLstring) { success, responseMovieList in
+            
+            guard success, let responseMovieList = responseMovieList, responseMovie = responseMovieList.first else
+            {
+                completion(success: false, responseMovie: nil)
+                return
+            }
+            completion(success: true, responseMovie: responseMovie)
+        }
     }
     
     /**
@@ -63,16 +72,25 @@ class RequestManager
      - parameter imdbID:     Searchstring to pass into URL
      - parameter completion: completion block with success bool and optinal JSON return
      */
-    func queryMovies(withImdbID imdbID: String, completion: (success: Bool, responseMovieList: [Movie]?) -> Void)
+    func queryMovie(withImdbID imdbID: String, completion: (success: Bool, responseMovie: Movie?) -> Void)
     {
         guard imdbID.characters.count > 1 else
         {
-            completion(success: false, responseMovieList: nil)
+            completion(success: false, responseMovie: nil)
             return
         }
         
         let URLstring = "\(AppURLRoutes.exactImdbIDSearchURL)\(imdbID)"
-        queryMovies(withURLString: URLstring, completion: completion)
+        
+        queryMovies(withURLString: URLstring) { success, responseMovieList in
+            
+            guard success, let responseMovieList = responseMovieList, responseMovie = responseMovieList.first else
+            {
+                completion(success: false, responseMovie: nil)
+                return
+            }
+            completion(success: true, responseMovie: responseMovie)
+        }
     }
     
     /**

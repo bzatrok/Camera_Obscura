@@ -3,6 +3,6 @@ use_frameworks!
 
 target 'Camera Obscura' do
 
-  pod 'SwiftyJSON'
+#  pod 'SwiftyJSON'
 
 end

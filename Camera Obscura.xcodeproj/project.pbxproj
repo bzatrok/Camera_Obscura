@@ -18,6 +18,9 @@
 		245AD5201D0D5E200071C34A /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AD51F1D0D5E200071C34A /* RequestManager.swift */; };
 		245AD5231D0D61C90071C34A /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AD5221D0D61C90071C34A /* AppConstants.swift */; };
 		245AD5251D0D61D70071C34A /* AppURLRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245AD5241D0D61D70071C34A /* AppURLRoutes.swift */; };
+		249B67271D0D90C100680525 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249B67261D0D90C100680525 /* AppColors.swift */; };
+		249B672B1D0D919100680525 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 249B67291D0D919100680525 /* Localizable.strings */; };
+		249B672E1D0D94F400680525 /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249B672D1D0D94F400680525 /* LoadingIndicator.swift */; };
 		24EBF2431D0D58C5000529F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EBF2421D0D58C5000529F5 /* AppDelegate.swift */; };
 		24EBF2451D0D58C5000529F5 /* MovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EBF2441D0D58C5000529F5 /* MovieListViewController.swift */; };
 		24EBF2481D0D58C5000529F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24EBF2461D0D58C5000529F5 /* Main.storyboard */; };
@@ -40,6 +43,9 @@
 		245AD51F1D0D5E200071C34A /* RequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestManager.swift; path = Classes/Managers/RequestManager.swift; sourceTree = "<group>"; };
 		245AD5221D0D61C90071C34A /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppConstants.swift; path = Classes/Structs/AppConstants.swift; sourceTree = "<group>"; };
 		245AD5241D0D61D70071C34A /* AppURLRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppURLRoutes.swift; path = Classes/Structs/AppURLRoutes.swift; sourceTree = "<group>"; };
+		249B67261D0D90C100680525 /* AppColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppColors.swift; path = Classes/Structs/AppColors.swift; sourceTree = "<group>"; };
+		249B672A1D0D919100680525 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		249B672D1D0D94F400680525 /* LoadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingIndicator.swift; path = Classes/Views/LoadingIndicator/LoadingIndicator.swift; sourceTree = "<group>"; };
 		24EBF23F1D0D58C4000529F5 /* Camera Obscura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Camera Obscura.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24EBF2421D0D58C5000529F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24EBF2441D0D58C5000529F5 /* MovieListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MovieListViewController.swift; path = Classes/Controllers/MovieListViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +125,7 @@
 			children = (
 				245AD5221D0D61C90071C34A /* AppConstants.swift */,
 				245AD5241D0D61D70071C34A /* AppURLRoutes.swift */,
+				249B67261D0D90C100680525 /* AppColors.swift */,
 			);
 			name = Structs;
 			sourceTree = "<group>";
@@ -128,6 +135,22 @@
 			children = (
 			);
 			name = Factories;
+			sourceTree = "<group>";
+		};
+		249B67281D0D917500680525 /* Localizations */ = {
+			isa = PBXGroup;
+			children = (
+				249B67291D0D919100680525 /* Localizable.strings */,
+			);
+			name = Localizations;
+			sourceTree = "<group>";
+		};
+		249B672C1D0D94CE00680525 /* LoadingIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				249B672D1D0D94F400680525 /* LoadingIndicator.swift */,
+			);
+			name = LoadingIndicator;
 			sourceTree = "<group>";
 		};
 		24EBF2361D0D58C4000529F5 = {
@@ -169,6 +192,7 @@
 		24EBF2551D0D58E9000529F5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				249B67281D0D917500680525 /* Localizations */,
 				245AD5291D0D71940071C34A /* Factories */,
 				245AD5211D0D61BB0071C34A /* Structs */,
 				245AD5101D0D5C880071C34A /* Models */,
@@ -192,6 +216,7 @@
 		24EBF2571D0D58FC000529F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				249B672C1D0D94CE00680525 /* LoadingIndicator */,
 				242833E41D0D829A00C289CD /* MovieDetailCells */,
 				242833E31D0D829500C289CD /* MovieListCells */,
 			);
@@ -279,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24EBF24D1D0D58C5000529F5 /* LaunchScreen.storyboard in Resources */,
+				249B672B1D0D919100680525 /* Localizable.strings in Resources */,
 				24EBF24A1D0D58C5000529F5 /* Assets.xcassets in Resources */,
 				24EBF2481D0D58C5000529F5 /* Main.storyboard in Resources */,
 			);
@@ -346,10 +372,12 @@
 				24EBF2431D0D58C5000529F5 /* AppDelegate.swift in Sources */,
 				245AD5231D0D61C90071C34A /* AppConstants.swift in Sources */,
 				245AD51E1D0D5E180071C34A /* PersistenceManager.swift in Sources */,
+				249B672E1D0D94F400680525 /* LoadingIndicator.swift in Sources */,
 				242833E81D0D82D000C289CD /* MovieDetailDescriptionCell.swift in Sources */,
 				245AD5201D0D5E200071C34A /* RequestManager.swift in Sources */,
 				245AD5161D0D5CD90071C34A /* Camera-Obscura.xcdatamodeld in Sources */,
 				242833E21D0D81DA00C289CD /* MovieDetailViewController.swift in Sources */,
+				249B67271D0D90C100680525 /* AppColors.swift in Sources */,
 				242833E61D0D82B700C289CD /* MovieDetailHeaderCell.swift in Sources */,
 				245AD51B1D0D5DF20071C34A /* Movie.swift in Sources */,
 			);
@@ -358,6 +386,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		249B67291D0D919100680525 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				249B672A1D0D919100680525 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		24EBF2461D0D58C5000529F5 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
