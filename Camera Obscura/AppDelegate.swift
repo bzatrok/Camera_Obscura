@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftyJSON
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
@@ -17,6 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
         // Override point for customization after application launch.
+        
+        RequestManager.sharedInstance.queryMovies(withTitleLike: "batman", forPage: 0) { success, responseMovieList in
+            
+            if let responseMovieList = responseMovieList
+            {
+                print(responseMovieList)
+            }
+            else
+            {
+                print(success)
+            }
+        }
+        
         return true
     }
 
@@ -58,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     
     lazy var managedObjectModel: NSManagedObjectModel = {
         // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-        let modelURL = NSBundle.mainBundle().URLForResource("Camera-Obscruta", withExtension: "momd")!
+        let modelURL = NSBundle.mainBundle().URLForResource("Camera-Obscrura", withExtension: "momd")!
         return NSManagedObjectModel(contentsOfURL: modelURL)!
     }()
     

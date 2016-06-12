@@ -14,4 +14,10 @@ struct AppURLRoutes
     static let similarTitleSearchURL    = "\(baseAPIURL)?s="
     static let exactTitleSearchURL      = "\(baseAPIURL)?t="
     static let exactImdbIDSearchURL     = "\(baseAPIURL)?i="
+    static let paginationPostFix        = "&page="
+    
+    static func similarTitleSearchUrl(withSearchString searchString: String, forPage: Int) -> String
+    {
+        return "\(AppURLRoutes.similarTitleSearchURL)\(searchString)\(AppURLRoutes.paginationPostFix)\(forPage)"
+    }
 }

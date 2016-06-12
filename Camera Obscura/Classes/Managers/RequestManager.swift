@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 
 class RequestManager
 {
@@ -28,7 +27,7 @@ class RequestManager
      - parameter titleLike:  Searchstring to pass into URL
      - parameter completion: completion block with success bool and optinal JSON return
      */
-    func queryMovies(withTitleLike titleLike: String, completion: (success: Bool, responseMovieList: JSON?) -> Void)
+    func queryMovies(withTitleLike titleLike: String, forPage: Int, completion: (success: Bool, responseMovieList: [Movie]?) -> Void)
     {
         guard titleLike.characters.count > 1 else
         {
@@ -36,7 +35,7 @@ class RequestManager
             return
         }
         
-        let URLstring = "\(AppURLRoutes.similarTitleSearchURL)\(titleLike)"
+        let URLstring = AppURLRoutes.similarTitleSearchUrl(withSearchString: titleLike, forPage: forPage)
         queryMovies(withURLString: URLstring, completion: completion)
     }
     
@@ -46,7 +45,7 @@ class RequestManager
      - parameter exactTitle: Searchstring to pass into URL
      - parameter completion: completion block with success bool and optinal JSON return
      */
-    func queryMovies(withExactTitle exactTitle: String, completion: (success: Bool, responseMovieList: JSON?) -> Void)
+    func queryMovies(withExactTitle exactTitle: String, completion: (success: Bool, responseMovieList: [Movie]?) -> Void)
     {
         guard exactTitle.characters.count > 1 else
         {
@@ -64,7 +63,7 @@ class RequestManager
      - parameter imdbID:     Searchstring to pass into URL
      - parameter completion: completion block with success bool and optinal JSON return
      */
-    func queryMovies(withImdbID imdbID: String, completion: (success: Bool, responseMovieList: JSON?) -> Void)
+    func queryMovies(withImdbID imdbID: String, completion: (success: Bool, responseMovieList: [Movie]?) -> Void)
     {
         guard imdbID.characters.count > 1 else
         {
@@ -80,9 +79,9 @@ class RequestManager
      Queries movies from OMDB API using an URL String
      
      - parameter URLString:  URLString to generate request URL from
-     - parameter completion: completion block with success bool and optinal JSON return
+     - parameter completion: completion block with success bool and optinal Dictionary return
      */
-    func queryMovies(withURLString URLString: String, completion: (success: Bool, responseMovieList: JSON?) -> Void)
+    func queryMovies(withURLString URLString: String, completion: (success: Bool, responseMovieList: [Movie]?) -> Void)
     {
         guard let URL = NSURL(string: URLString) else
         {
@@ -94,20 +93,34 @@ class RequestManager
         let session         = NSURLSession.sharedSession()
         request.HTTPMethod  = AppConstants.Requests.GET
         
-        let task = session.dataTaskWithRequest(request) { data, response, error -> Void in
+        let task = session.dataTaskWithRequest(request) { data, response, error in
         
-            print(response)
-            
-            if let error = error
+            guard error == nil, let responseData = data else
             {
                 print(error)
                 completion(success: false, responseMovieList: nil)
+                return
             }
-            else if let data = data
+            
+            do
             {
-                let json = JSON(data)
+                guard let moviesDict = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject],
+                    moviesArray = moviesDict["Search"] as? [[String : AnyObject]] else
+                {
+                    print("error trying to convert data to JSON")
+                    completion(success: false, responseMovieList: nil)
+                    return
+                }
                 
-                completion(success: true, responseMovieList: json)
+                let movieList = PersistenceManager.sharedInstance.saveMovies(fromMovieArray: moviesArray)
+                
+                completion(success: true, responseMovieList: movieList)
+                
+            }
+            catch
+            {
+                print("error trying to convert data to JSON")
+                completion(success: false, responseMovieList: nil)
             }
         }
         

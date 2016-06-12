@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import SwiftyJSON
 
 class PersistenceManager
 {
@@ -30,50 +29,51 @@ class PersistenceManager
      
      - parameter dictionary: The dictionary that contains the movie object's data
      */
-    func saveMovie(fromJSON json: JSON)
+    func saveMovie(fromMovieDictionary movieDictionary: [String : AnyObject]) -> Movie?
     {
         guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else
         {
-            return
+            return nil
         }
         let moc = appDelegate.managedObjectContext
         
         guard let entity = NSEntityDescription.entityForName(AppConstants.Models.MovieModelName, inManagedObjectContext:moc) else
         {
-            return
+            return nil
         }
         
         let movie = Movie(entity: entity, insertIntoManagedObjectContext: moc)
         
-        movie.title         = json["Title"].stringValue
-        movie.year          = json["Year"].stringValue
-        movie.rated         = json["Rated"].stringValue
-        movie.released      = json["Released"].stringValue
-        movie.runtime       = json["Runtime"].stringValue
-        movie.genre         = json["Genre"].stringValue
-        movie.director      = json["Director"].stringValue
-        movie.writer        = json["Writer"].stringValue
-        movie.actors        = json["Actors"].stringValue
-        movie.plot          = json["Plot"].stringValue
-        movie.language      = json["Language"].stringValue
-        movie.country       = json["Country"].stringValue
-        movie.awards        = json["Awards"].stringValue
-        movie.posterURL     = json["Poster"].stringValue
-        movie.metascore     = json["Metascore"].stringValue
-        movie.imdbRating    = json["imdbRating"].stringValue
-        movie.imdbVotes     = json["imdbVotes"].stringValue
-        movie.imdbID        = json["Title"].stringValue
-        movie.type          = json["Type"].stringValue
+        movie.title         = movieDictionary["Title"] as? String
+        movie.year          = movieDictionary["Year"] as? String
+        movie.rated         = movieDictionary["Rated"] as? String
+        movie.released      = movieDictionary["Released"] as? String
+        movie.runtime       = movieDictionary["Runtime"] as? String
+        movie.genre         = movieDictionary["Genre"] as? String
+        movie.director      = movieDictionary["Director"] as? String
+        movie.writer        = movieDictionary["Writer"] as? String
+        movie.actors        = movieDictionary["Actors"] as? String
+        movie.plot          = movieDictionary["Plot"] as? String
+        movie.language      = movieDictionary["Language"] as? String
+        movie.country       = movieDictionary["Country"] as? String
+        movie.awards        = movieDictionary["Awards"] as? String
+        movie.posterURL     = movieDictionary["Poster"] as? String
+        movie.metascore     = movieDictionary["Metascore"] as? String
+        movie.imdbRating    = movieDictionary["imdbRating"] as? String
+        movie.imdbVotes     = movieDictionary["imdbVotes"] as? String
+        movie.imdbID        = movieDictionary["Title"] as? String
+        movie.type          = movieDictionary["Type"] as? String
         
         do
         {
             try moc.save()
+            return movie
         }
         catch
         {
             print("Saving movie failed")
+            return nil
         }
-        return
     }
     
     /**
@@ -81,14 +81,20 @@ class PersistenceManager
      
      - parameter dictionaryArray: the array that contains the movie dictionary objects
      */
-    func saveMovies(fromJSON json: JSON)
+    func saveMovies(fromMovieArray movieArray: [[String : AnyObject]]) -> [Movie]
     {
-        for item in json
+        var moviesList = [Movie]()
+        
+        for movieDictionary in movieArray
         {
-            let movieJSON = item.1
-            
-            saveMovie(fromJSON: movieJSON)
+            guard let movie = saveMovie(fromMovieDictionary: movieDictionary) else
+            {
+                break
+            }
+            moviesList.append(movie)
         }
+        
+        return moviesList
     }
     
     //FETCH

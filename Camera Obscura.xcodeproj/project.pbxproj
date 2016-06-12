@@ -98,6 +98,13 @@
 			name = Structs;
 			sourceTree = "<group>";
 		};
+		245AD5291D0D71940071C34A /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Factories;
+			sourceTree = "<group>";
+		};
 		24EBF2361D0D58C4000529F5 = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +144,7 @@
 		24EBF2551D0D58E9000529F5 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				245AD5291D0D71940071C34A /* Factories */,
 				245AD5211D0D61BB0071C34A /* Structs */,
 				245AD5101D0D5C880071C34A /* Models */,
 				24EBF2571D0D58FC000529F5 /* Views */,
