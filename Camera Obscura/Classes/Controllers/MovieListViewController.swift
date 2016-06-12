@@ -91,7 +91,7 @@ class MovieListViewController: UIViewController
     private func fetchMovies(withSearchString searchString: String)
     {
         moviesList = []
-        tableView.reloadData()
+//        tableView.reloadData()
         
         presentViewController(loadingIndicator, animated: true, completion: nil)
         
@@ -116,21 +116,27 @@ class MovieListViewController: UIViewController
      */
     private func reloadTableView()
     {
-        var indexPaths = [NSIndexPath]()
-        
-        for index in moviesListCountBeforeUpdate ..< self.moviesList.count
-        {
-            let indexPath = NSIndexPath(forRow: index, inSection: MovieTableSection.List.rawValue)
-            indexPaths.append(indexPath)
-        }
-    
         tableView.beginUpdates()
-        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
+        let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
+        tableView.reloadSections(sections, withRowAnimation: .Fade)
         tableView.endUpdates()
         
-        loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
         
-        tableView.layoutIfNeeded()
+//        var indexPaths = [NSIndexPath]()
+//        
+//        for index in moviesListCountBeforeUpdate ..< self.moviesList.count
+//        {
+//            let indexPath = NSIndexPath(forRow: index, inSection: MovieTableSection.List.rawValue)
+//            indexPaths.append(indexPath)
+//        }
+//    
+//        tableView.beginUpdates()
+//        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
+//        tableView.endUpdates()
+//        
+        loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+//
+//        tableView.layoutIfNeeded()
     }
 
     //MARK: Functions
