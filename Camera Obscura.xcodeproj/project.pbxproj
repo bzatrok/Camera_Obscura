@@ -27,6 +27,7 @@
 		24EBF24A1D0D58C5000529F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24EBF2491D0D58C5000529F5 /* Assets.xcassets */; };
 		24EBF24D1D0D58C5000529F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24EBF24B1D0D58C5000529F5 /* LaunchScreen.storyboard */; };
 		24F40F591D0DA5A5001F7900 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F40F581D0DA5A5001F7900 /* UIViewExtensions.swift */; };
+		24F40F5B1D0DB106001F7900 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F40F5A1D0DB106001F7900 /* UIImageExtensions.swift */; };
 		5D2C80E745DD28638E773CC3 /* Pods_Camera_Obscura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09CB2F8DCAFFA88DD8E2D9D5 /* Pods_Camera_Obscura.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		24EBF24C1D0D58C5000529F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		24EBF24E1D0D58C5000529F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24F40F581D0DA5A5001F7900 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewExtensions.swift; path = Classes/Extensions/UIViewExtensions.swift; sourceTree = "<group>"; };
+		24F40F5A1D0DB106001F7900 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Classes/Extensions/UIImageExtensions.swift; sourceTree = "<group>"; };
 		FE735FFA8F248A1F43B9B0D8 /* Pods-Camera Obscura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Camera Obscura.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Camera Obscura/Pods-Camera Obscura.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				24F40F581D0DA5A5001F7900 /* UIViewExtensions.swift */,
+				24F40F5A1D0DB106001F7900 /* UIImageExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				249B67271D0D90C100680525 /* AppColors.swift in Sources */,
 				242833E61D0D82B700C289CD /* MovieDetailHeaderCell.swift in Sources */,
 				245AD51B1D0D5DF20071C34A /* Movie.swift in Sources */,
+				24F40F5B1D0DB106001F7900 /* UIImageExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

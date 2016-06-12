@@ -65,9 +65,7 @@ class MovieListViewController: UIViewController
      */
     private func setupView()
     {
-        edgesForExtendedLayout                  = .None
-//        automaticallyAdjustsScrollViewInsets    = false
-        
+        edgesForExtendedLayout                                  = .None
         navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: AppColors.greyTextColor]
         navigationController?.navigationBar.tintColor           =  AppColors.greyTextColor
         navigationItem.title                                    = NSLocalizedString("movieListTitle", comment: "navigation bar title in movie list view")
@@ -116,11 +114,12 @@ class MovieListViewController: UIViewController
      */
     private func reloadTableView()
     {
-        tableView.beginUpdates()
-        let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
-        tableView.reloadSections(sections, withRowAnimation: .Fade)
-        tableView.endUpdates()
+//        tableView.beginUpdates()
+//        let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
+//        tableView.reloadSections(sections, withRowAnimation: .Fade)
+//        tableView.endUpdates()
         
+        tableView.reloadData()
         
 //        var indexPaths = [NSIndexPath]()
 //        
@@ -181,20 +180,8 @@ extension MovieListViewController: UITableViewDelegate
             return
         }
         
-        let movieToQuery = moviesList[indexPath.row]
-        
-        if let imdbID = movieToQuery.imdbID
-        {
-            RequestManager.sharedInstance.queryMovie(withImdbID: imdbID) { success, responseMovie in
-                
-                if let responseMovie = responseMovie where success
-                {
-                    self.selectedMovie = responseMovie
-                    self.view.findFirstResponder()?.resignFirstResponder()
-                    self.performSegueWithIdentifier(self.movieDetailSeque, sender: self)
-                }
-            }
-        }
+        selectedMovie = moviesList[indexPath.row]
+        performSegueWithIdentifier(movieDetailSeque, sender: self)
     }
 }
 
@@ -251,6 +238,8 @@ extension MovieListViewController: UITableViewDataSource
                 {
                     return cell!
                 }
+                
+                cell!.backgroundImageView.image = UIImage()
                 
                 cell!.setBackgroundImage(forPosterURL: posterURL)
                 

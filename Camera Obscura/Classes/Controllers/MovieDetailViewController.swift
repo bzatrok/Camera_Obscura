@@ -22,6 +22,10 @@ class MovieDetailViewController: UIViewController
     
     private let emptyCellID         = "emptyCell"
     
+    private let loadingIndicator    = LoadingIndicator.createLoadingIndicator()
+    
+    private var didLoadInfo         = false
+    
     //MARK: IBOutlets
     
     @IBOutlet weak var tableView: UITableView!
@@ -39,7 +43,6 @@ class MovieDetailViewController: UIViewController
             while let _ = self.init(rawValue: current) { current += 1 }
             return current
         }
-        
     }
     
     //MARK: Life-cycle
@@ -50,7 +53,22 @@ class MovieDetailViewController: UIViewController
         
         setupView()
         setupDelegation()
+        fetchMovieDetails()
     }
+    
+//    override func viewWillAppear(animated: Bool)
+//    {
+//        super.viewWillAppear(animated)
+//        
+//        fetchMovieDetails()
+//    }
+//    
+//    override func viewDidAppear(animated: Bool)
+//    {
+//        super.viewDidAppear(animated)
+//        
+//        fetchMovieDetails()
+//    }
     
     //MARK: IBActions
     
@@ -61,6 +79,7 @@ class MovieDetailViewController: UIViewController
      */
     private func setupView()
     {
+        edgesForExtendedLayout                                  = .None
         navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: AppColors.greyTextColor]
         navigationController?.navigationBar.tintColor           =  AppColors.greyTextColor
         
@@ -78,6 +97,50 @@ class MovieDetailViewController: UIViewController
     {
         tableView.delegate      = self
         tableView.dataSource    = self
+    }
+    
+    /**
+     Clears previous results, fetches movies based on the entered search string
+     
+     - parameter searchString: String entered into searchbar
+     */
+    private func fetchMovieDetails()
+    {
+        guard let imdbID = selectedMovie.imdbID else
+        {
+            return
+        }
+        
+//        presentViewController(loadingIndicator, animated: true, completion: nil)
+        
+        RequestManager.sharedInstance.queryMovie(withImdbID: imdbID) { success, responseMovie in
+            
+            if let responseMovie = responseMovie where success
+            {
+                self.selectedMovie  = responseMovie
+                self.didLoadInfo    = true
+                self.reloadTableView()
+            }
+//            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+    
+    /**
+     Reloads tableview by inserting rows of movie results
+     */
+    private func reloadTableView()
+    {
+        var indexPaths = [NSIndexPath]()
+        
+        for index in 0 ..< selectedMovie.infoDictArray.count
+        {
+            let indexPath = NSIndexPath(forRow: index, inSection: MovieDetailTableSection.Info.rawValue)
+            indexPaths.append(indexPath)
+        }
+
+        tableView.beginUpdates()
+        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
+        tableView.endUpdates()
     }
 }
 
@@ -121,6 +184,10 @@ extension MovieDetailViewController: UITableViewDataSource
                 return 1
                 
             case .Info:
+                guard didLoadInfo else
+                {
+                    return 0
+                }
                 return selectedMovie.infoDictArray.count
         }
     }
@@ -159,8 +226,15 @@ extension MovieDetailViewController: UITableViewDataSource
                     cell = MovieDetailHeaderCell(style: .Default, reuseIdentifier: headerCellID)
                 }
                 
-                cell!.headerImageView.image = UIImage()
+                cell!.headerImageView.image = UIImage(color: AppColors.blueBackgroundColor)
                 cell!.titleLabel.text       = selectedMovie.title
+                
+                guard let posterURL = selectedMovie.posterURL else
+                {
+                    return cell!
+                }
+                
+                cell!.setBackgroundImage(forPosterURL: posterURL)
                 
                 return cell!
                 

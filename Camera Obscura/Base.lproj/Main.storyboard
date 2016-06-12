@@ -18,6 +18,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="TC2-oZ-umJ">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BSa-a6-SY1">
                                 <rect key="frame" x="0.0" y="108" width="320" height="460"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -58,28 +62,46 @@
                                             <outlet property="titleLabel" destination="s45-lM-opB" id="MQp-SM-CPw"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emptyCell" rowHeight="0.0" id="Nw2-80-fMg">
-                                        <rect key="frame" x="0.0" y="192" width="320" height="0.0"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PlaceholderCell" rowHeight="300" id="Nw2-80-fMg" userLabel="PlaceholderCell">
+                                        <rect key="frame" x="0.0" y="192" width="320" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nw2-80-fMg" id="UNA-iX-dAB">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="300"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Movie fan? Bored at work? " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aIt-FH-BXj">
+                                                    <rect key="frame" x="132" y="104" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="35"/>
+                                                    <color key="textColor" red="0.27450980390000002" green="0.27450980390000002" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="aIt-FH-BXj" firstAttribute="centerY" secondItem="UNA-iX-dAB" secondAttribute="centerY" id="44d-YM-P74"/>
+                                                <constraint firstAttribute="trailing" secondItem="aIt-FH-BXj" secondAttribute="trailing" constant="20" id="Spg-n8-wnt"/>
+                                                <constraint firstItem="aIt-FH-BXj" firstAttribute="centerX" secondItem="UNA-iX-dAB" secondAttribute="centerX" id="nBz-dp-Vzy"/>
+                                                <constraint firstItem="aIt-FH-BXj" firstAttribute="leading" secondItem="UNA-iX-dAB" secondAttribute="leading" constant="20" id="tEl-6O-9Tj"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="emptyCell" rowHeight="0.0" id="0eQ-Po-czM">
+                                        <rect key="frame" x="0.0" y="492" width="320" height="0.0"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0eQ-Po-czM" id="JEa-PT-msL">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="TC2-oZ-umJ">
-                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BSa-a6-SY1" firstAttribute="top" secondItem="TC2-oZ-umJ" secondAttribute="bottom" id="2K0-2e-YTX"/>
                             <constraint firstAttribute="trailing" secondItem="BSa-a6-SY1" secondAttribute="trailing" id="6au-3v-x5W"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="BSa-a6-SY1" secondAttribute="bottom" id="O52-Wc-Qnu"/>
                             <constraint firstItem="BSa-a6-SY1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QfR-uS-qpg"/>
                             <constraint firstItem="TC2-oZ-umJ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="SLn-YK-FK3"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="BSa-a6-SY1" secondAttribute="bottom" id="cVd-7D-k31"/>
                             <constraint firstAttribute="trailing" secondItem="TC2-oZ-umJ" secondAttribute="trailing" id="d0g-QA-fKu"/>
                             <constraint firstItem="TC2-oZ-umJ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="qP9-ok-JOi"/>
                         </constraints>

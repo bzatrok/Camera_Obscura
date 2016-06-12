@@ -39,6 +39,7 @@ class MovieListCell: UITableViewCell
                 return
             }
             self.backgroundImageView.image = responseImage
+            print("loaded movie poster image")
         }
     }
 }

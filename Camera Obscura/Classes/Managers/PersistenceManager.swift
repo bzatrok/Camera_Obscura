@@ -134,6 +134,7 @@ class PersistenceManager
             toMovieObject.imdbRating    = imdbRating
             toMovieObject.imdbVotes     = imdbVotes
         }
+        
         return toMovieObject
     }
     

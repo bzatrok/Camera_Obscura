@@ -12,8 +12,8 @@
 import Foundation
 import CoreData
 
-extension Movie {
-
+extension Movie
+{
     @NSManaged var title: String?
     @NSManaged var year: String?
     @NSManaged var rated: String?
@@ -33,5 +33,4 @@ extension Movie {
     @NSManaged var imdbVotes: String?
     @NSManaged var imdbID: String?
     @NSManaged var type: String?
-
 }
