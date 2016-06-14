@@ -89,21 +89,20 @@ class PersistenceManager
      */
     private func addData(fromDictonary movieDictionary: [String : AnyObject], toMovieObject: Movie) -> Movie?
     {
-        guard let title = movieDictionary["Title"] as? String,
+        if let title = movieDictionary["Title"] as? String,
                 year = movieDictionary["Year"] as? String,
                 posterURL = movieDictionary["Poster"] as? String,
                 imdbID = movieDictionary["imdbID"] as? String,
-                type = movieDictionary["Type"] as? String else
+                type = movieDictionary["Type"] as? String
         {
-            return nil
+            
+            toMovieObject.title         = title
+            toMovieObject.year          = year
+            toMovieObject.posterURL     = posterURL
+            toMovieObject.imdbID        = imdbID
+            toMovieObject.type          = type
         }
-        
-        toMovieObject.title         = title
-        toMovieObject.year          = year
-        toMovieObject.posterURL     = posterURL
-        toMovieObject.imdbID        = imdbID
-        toMovieObject.type          = type
-        
+    
         if let rated = movieDictionary["Rated"] as? String,
             released = movieDictionary["Released"] as? String,
             runtime = movieDictionary["Runtime"] as? String,

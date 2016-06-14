@@ -18,13 +18,22 @@ class MovieListViewController: UIViewController
     
     private let movieCellHeight             : CGFloat = 100
     private let movieCellID                 = "MovieListCell"
+    private let placeholderCellID           = "PlaceholderCell"
     private let emptyCellID                 = "emptyCell"
     
     private let movieDetailSeque            = "movieDetailSeque"
     
     private var selectedMovie               : Movie?
-    
     private let loadingIndicator            = LoadingIndicator.createLoadingIndicator()
+    
+    private var shouldDisplayPlaceholder : Bool {
+        
+        guard moviesList.count > 0 else
+        {
+            return true
+        }
+        return false
+    }
     
     //MARK: IBOutlets
     
@@ -114,12 +123,19 @@ class MovieListViewController: UIViewController
      */
     private func reloadTableView()
     {
-//        tableView.beginUpdates()
-//        let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
-//        tableView.reloadSections(sections, withRowAnimation: .Fade)
-//        tableView.endUpdates()
+        dispatch_async(dispatch_get_main_queue(), {
+            
+            self.tableView.beginUpdates()
+            let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
+            self.tableView.reloadSections(sections, withRowAnimation: .Fade)
+            self.tableView.endUpdates()
+            
+            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+            
+        })
         
-        tableView.reloadData()
+        
+//        tableView.reloadData()
         
 //        var indexPaths = [NSIndexPath]()
 //        
@@ -133,7 +149,6 @@ class MovieListViewController: UIViewController
 //        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
 //        tableView.endUpdates()
 //        
-        loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
 //
 //        tableView.layoutIfNeeded()
     }
@@ -196,14 +211,18 @@ extension MovieListViewController: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
+        guard !shouldDisplayPlaceholder else
+        {
+            return 1
+        }
         return moviesList.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
     {
-        guard let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
+        guard !shouldDisplayPlaceholder ,let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
         {
-            return 0
+            return UIScreen.mainScreen().bounds.height - 104
         }
         
         switch section
@@ -215,9 +234,9 @@ extension MovieListViewController: UITableViewDataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        guard let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
+        guard !shouldDisplayPlaceholder, let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
         {
-            return tableView.dequeueReusableCellWithIdentifier(emptyCellID, forIndexPath: indexPath)
+            return tableView.dequeueReusableCellWithIdentifier(placeholderCellID, forIndexPath: indexPath)
         }
         
         switch section
