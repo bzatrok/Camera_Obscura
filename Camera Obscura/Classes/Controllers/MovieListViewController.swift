@@ -133,24 +133,6 @@ class MovieListViewController: UIViewController
             self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
             
         })
-        
-        
-//        tableView.reloadData()
-        
-//        var indexPaths = [NSIndexPath]()
-//        
-//        for index in moviesListCountBeforeUpdate ..< self.moviesList.count
-//        {
-//            let indexPath = NSIndexPath(forRow: index, inSection: MovieTableSection.List.rawValue)
-//            indexPaths.append(indexPath)
-//        }
-//    
-//        tableView.beginUpdates()
-//        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
-//        tableView.endUpdates()
-//        
-//
-//        tableView.layoutIfNeeded()
     }
 
     //MARK: Functions
@@ -190,7 +172,7 @@ extension MovieListViewController: UITableViewDelegate
 {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-        guard let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
+        guard !shouldDisplayPlaceholder ,let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
         {
             return
         }

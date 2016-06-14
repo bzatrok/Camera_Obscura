@@ -112,7 +112,7 @@ class MovieDetailViewController: UIViewController
         }
         
 //        presentViewController(loadingIndicator, animated: true, completion: nil)
-        
+//        
         RequestManager.sharedInstance.queryMovie(withImdbID: imdbID) { success, responseMovie in
             
             if let responseMovie = responseMovie where success
@@ -121,7 +121,7 @@ class MovieDetailViewController: UIViewController
                 self.didLoadInfo    = true
                 self.reloadTableView()
             }
-//            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
         }
     }
     
@@ -137,10 +137,14 @@ class MovieDetailViewController: UIViewController
             let indexPath = NSIndexPath(forRow: index, inSection: MovieDetailTableSection.Info.rawValue)
             indexPaths.append(indexPath)
         }
-
-        tableView.beginUpdates()
-        tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Middle)
-        tableView.endUpdates()
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            
+            self.tableView.beginUpdates()
+            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+            self.tableView.endUpdates()
+            
+        })
     }
 }
 

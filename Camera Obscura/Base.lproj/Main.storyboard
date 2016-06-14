@@ -62,7 +62,7 @@
                                             <outlet property="titleLabel" destination="s45-lM-opB" id="MQp-SM-CPw"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PlaceholderCell" rowHeight="300" id="Nw2-80-fMg" userLabel="PlaceholderCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PlaceholderCell" rowHeight="300" id="Nw2-80-fMg" userLabel="PlaceholderCell">
                                         <rect key="frame" x="0.0" y="128" width="320" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nw2-80-fMg" id="UNA-iX-dAB">
