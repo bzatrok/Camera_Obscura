@@ -35,15 +35,15 @@ class MovieListCell: UITableViewCell
     {
         animateBackgroundAlpha(toValue: 0)
         
-        RequestManager.sharedInstance.fetchImage(posterURL) { success, responseImage in
+        RequestManager.sharedInstance.fetchImage(posterURL) { [weak self] success, responseImage in
             
             guard let responseImage = responseImage where success else
             {
-                self.animateBackgroundAlpha(toValue: 1)
+                self?.animateBackgroundAlpha(toValue: 1)
                 return
             }
-            self.backgroundImageView.image = responseImage
-            self.animateBackgroundAlpha(toValue: 1)
+            self?.backgroundImageView.image = responseImage
+            self?.animateBackgroundAlpha(toValue: 1)
         }
     }
 
@@ -51,9 +51,9 @@ class MovieListCell: UITableViewCell
     {
         let floatValue = CGFloat(value)
         
-        UIView.animateWithDuration(0.5) { 
+        UIView.animateWithDuration(0.5) { [weak self] in
             
-            self.backgroundImageView.alpha = floatValue
+            self?.backgroundImageView.alpha = floatValue
         }
     }
 }

@@ -20,7 +20,6 @@ class Movie: NSManagedObject
             director = director,
             writer = writer,
             actors = actors,
-            plot = plot,
             language = language,
             country = country,
             awards = awards,
@@ -30,7 +29,6 @@ class Movie: NSManagedObject
         }
         
         return [["Released" : year],
-                ["Plot" : plot],
                 ["Genre" : genre],
                 ["IMDB Rating" : imdbRating],
                 ["Director" : director],

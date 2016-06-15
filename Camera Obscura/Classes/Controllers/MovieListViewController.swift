@@ -26,6 +26,8 @@ class MovieListViewController: UIViewController
     private var selectedMovie               : Movie?
     private let loadingIndicator            = LoadingIndicator.createLoadingIndicator()
     
+    private var isLoadingNextPage           = false
+    
     private var shouldDisplayPlaceholder : Bool {
         
         guard moviesList.count > 0 else
@@ -98,18 +100,19 @@ class MovieListViewController: UIViewController
     private func fetchMovies(withSearchString searchString: String)
     {
         moviesList = []
-//        tableView.reloadData()
         
         presentViewController(loadingIndicator, animated: true, completion: nil)
         
         RequestManager.sharedInstance.queryMovies(withTitleLike: searchString, forPage: currentPageToFetch) { success, responseMovieList in
+            
+            self.isLoadingNextPage = false
             
             if let responseMovieList = responseMovieList
             {
                 self.moviesListCountBeforeUpdate    = self.moviesList.count
                 self.currentPageToFetch             += 1
                 self.moviesList.appendContentsOf(responseMovieList)
-                self.reloadTableView()
+                self.reloadTableView(tableViewToReload: self.tableView)
             }
             else
             {
@@ -121,14 +124,14 @@ class MovieListViewController: UIViewController
     /**
      Reloads tableview by inserting rows of movie results
      */
-    private func reloadTableView()
+    private func reloadTableView(tableViewToReload tableView: UITableView)
     {
         dispatch_async(dispatch_get_main_queue(), {
             
-            self.tableView.beginUpdates()
-            let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
-            self.tableView.reloadSections(sections, withRowAnimation: .Fade)
-            self.tableView.endUpdates()
+            tableView.beginUpdates()
+            let sections = NSIndexSet(indexesInRange: NSMakeRange(0, tableView.numberOfSections))
+            tableView.reloadSections(sections, withRowAnimation: .Fade)
+            tableView.endUpdates()
             
             self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
             
@@ -172,8 +175,9 @@ extension MovieListViewController: UITableViewDelegate
 {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-        guard !shouldDisplayPlaceholder ,let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
+        guard !shouldDisplayPlaceholder else
         {
+            searchBar.becomeFirstResponder()
             return
         }
         
@@ -202,7 +206,7 @@ extension MovieListViewController: UITableViewDataSource
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
     {
-        guard !shouldDisplayPlaceholder ,let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
+        guard !shouldDisplayPlaceholder, let section = MovieTableSection(rawValue: indexPath.section) where section == .List else
         {
             return UIScreen.mainScreen().bounds.height - 104
         }
@@ -246,5 +250,23 @@ extension MovieListViewController: UITableViewDataSource
                 
                 return cell!
         }
+    }
+}
+
+//MARK : UIScrollViewDelegate
+
+extension MovieListViewController: UIScrollViewDelegate
+{
+    func scrollViewDidScroll(scrollView: UIScrollView)
+    {
+        let currentOffset       = scrollView.contentOffset.y
+        let maximumOffset       = scrollView.contentSize.height - scrollView.frame.size.height
+        
+            guard let searchString = searchBar.text where searchString.characters.count > 1 && maximumOffset - currentOffset < AppConstants.Fetching.nextPageLoadThresholdPointsFromBottom && !isLoadingNextPage else
+            {
+                return
+            }
+            isLoadingNextPage = true
+            fetchMovies(withSearchString: searchString)
     }
 }

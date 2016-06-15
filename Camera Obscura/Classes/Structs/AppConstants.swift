@@ -12,12 +12,17 @@ struct AppConstants
 {
     struct Models
     {
-        static let MovieModelName = "Movie"
+        static let MovieModelName                           = "Movie"
     }
     
     struct Requests
     {
-        static let GET  = "GET"
-        static let POST = "POST"
+        static let GET                                      = "GET"
+        static let POST                                     = "POST"
+    }
+    
+    struct Fetching
+    {
+        static let nextPageLoadThresholdPointsFromBottom    : CGFloat = -20.0
     }
 }

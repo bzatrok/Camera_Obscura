@@ -33,7 +33,15 @@ class MovieDetailViewController: UIViewController
     private enum MovieDetailTableSection: Int
     {
         case Header
-        case Info
+        case Released
+        case Genre
+        case IMDBRating
+        case Director
+        case Writer
+        case Actors
+        case Language
+        case Counry
+        case Awards
         
         static var count: Int
         {
@@ -52,14 +60,6 @@ class MovieDetailViewController: UIViewController
         setupView()
         setupDelegation()
         fetchMovieDetails()
-    }
-    
-    
-    override func viewWillAppear(animated: Bool)
-    {
-        super.viewWillAppear(animated)
-        
-//        calculateCellHeights()
     }
     
     //MARK: IBActions
@@ -123,22 +123,6 @@ class MovieDetailViewController: UIViewController
      */
     private func reloadTableView()
     {
-//        var indexPaths = [NSIndexPath]()
-//        
-//        for index in 0 ..< selectedMovie.infoDictArray.count
-//        {
-//            let indexPath = NSIndexPath(forRow: index, inSection: MovieDetailTableSection.Info.rawValue)
-//            indexPaths.append(indexPath)
-//        }
-//        
-//        dispatch_async(dispatch_get_main_queue(), {
-//            
-//            self.tableView.beginUpdates()
-//            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
-//            self.tableView.endUpdates()
-//            
-//        })
-        
         dispatch_async(dispatch_get_main_queue(), {
             
             self.tableView.beginUpdates()
@@ -146,23 +130,20 @@ class MovieDetailViewController: UIViewController
             self.tableView.reloadSections(sections, withRowAnimation: .Fade)
             self.tableView.endUpdates()
             
-//            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
-            
         })
     }
     
     private func calculateCellHeights()
     {
-        let screenWidth = UIScreen.mainScreen().bounds.width
+        let screenWidth = UIScreen.mainScreen().bounds.width - 40
         
-        guard let plot = selectedMovie.plot else
+        guard let plot = selectedMovie.plot, font = UIFont(name: AppFonts.helveticaNeue, size: 19) else
         {
             return
         }
         
-        let plotLabelCalculatedHeight = CGFloat(180) + plot.heightWithConstrainedWidth(screenWidth, font: UIFont(name: "HelveticaNeue-Regular", size: 19)!)
-        
-        headerCellHeight = headerCellHeight + plotLabelCalculatedHeight
+        let plotLabelCalculatedHeight   = plot.heightWithConstrainedWidth(screenWidth, font: font)
+        headerCellHeight                = headerCellHeight + plotLabelCalculatedHeight
     }
 }
 
@@ -202,15 +183,16 @@ extension MovieDetailViewController: UITableViewDataSource
         
         switch section
         {
-            case .Header:
+//            case .Header:
+//                return 1
+            
+            default:
                 return 1
-                
-            case .Info:
-                guard didLoadInfo else
-                {
-                    return 0
-                }
-                return selectedMovie.infoDictArray.count
+//                guard didLoadInfo else
+//                {
+//                    return 0
+//                }
+//                return selectedMovie.infoDictArray.count
         }
     }
     
@@ -226,9 +208,51 @@ extension MovieDetailViewController: UITableViewDataSource
             case .Header:
                 return headerCellHeight
             
-            case .Info:
+            default:
+                
+                guard didLoadInfo else
+                {
+                    return infoCellHeight
+                }
+                
+                let infoDict    = selectedMovie.infoDictArray[indexPath.section - 1]
+                let keys        = infoDict.keys
+                
+                if let title = keys.first, subtitle = infoDict[title], font = UIFont(name: AppFonts.helveticaNeue, size: 18)
+                {
+                    let screenWidth = UIScreen.mainScreen().bounds.width / 2
+                    let labelHeight = subtitle.heightWithConstrainedWidth(screenWidth, font: font)
+                    return labelHeight
+                }
+                
                 return infoCellHeight
         }
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
+    {
+        guard didLoadInfo, let currentSection = MovieDetailTableSection(rawValue: section) where currentSection != .Header else
+        {
+            return nil
+        }
+        
+        let infoDict    = selectedMovie.infoDictArray[section - 1]
+        let keys        = infoDict.keys
+        
+        if let title = keys.first
+        {
+            return title
+        }
+        return nil
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
+    {
+        guard let currentSection = MovieDetailTableSection(rawValue: section) where currentSection != .Header else
+        {
+            return 0
+        }
+        return 25
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
@@ -253,7 +277,13 @@ extension MovieDetailViewController: UITableViewDataSource
                 
                 return cell!
                 
-            case .Info:
+            default:
+                
+                guard didLoadInfo else
+                {
+                    return tableView.dequeueReusableCellWithIdentifier(emptyCellID, forIndexPath: indexPath)
+                }
+                
                 var cell = tableView.dequeueReusableCellWithIdentifier(infoCellID, forIndexPath: indexPath) as? MovieDetailDescriptionCell
                 
                 if cell == nil
@@ -261,7 +291,7 @@ extension MovieDetailViewController: UITableViewDataSource
                     cell = MovieDetailDescriptionCell(style: .Default, reuseIdentifier: infoCellID)
                 }
                 
-                let infoDict    = selectedMovie.infoDictArray[indexPath.row]
+                let infoDict    = selectedMovie.infoDictArray[indexPath.section - 1]
                 let keys        = infoDict.keys
                 
                 guard let title = keys.first, subtitle = infoDict[title] else

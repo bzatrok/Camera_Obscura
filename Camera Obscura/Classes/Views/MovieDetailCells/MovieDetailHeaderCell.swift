@@ -38,13 +38,13 @@ class MovieDetailHeaderCell: UITableViewCell
             return
         }
         
-        RequestManager.sharedInstance.fetchImage(posterURL) { success, responseImage in
+        RequestManager.sharedInstance.fetchImage(posterURL) { [weak self] success, responseImage in
             
             guard let responseImage = responseImage where success else
             {
                 return
             }
-            self.headerImageView.image = responseImage
+            self?.headerImageView.image = responseImage
             print("loaded movie poster image")
         }
         

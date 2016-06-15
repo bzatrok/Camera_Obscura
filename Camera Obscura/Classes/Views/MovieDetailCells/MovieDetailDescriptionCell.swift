@@ -14,7 +14,6 @@ class MovieDetailDescriptionCell: UITableViewCell
     
     //MARK: IBOutlets
     
-    @IBOutlet weak var leftLabel: UILabel!
     @IBOutlet weak var rightLabel: UILabel!
     
     //MARK: Life-cycle
@@ -25,7 +24,6 @@ class MovieDetailDescriptionCell: UITableViewCell
     
     func setupCell(forCompanyInfoWithTitle title: String, andSubtitle: String)
     {
-        leftLabel.text                      = title
         rightLabel.text                     = andSubtitle
     }
 }
