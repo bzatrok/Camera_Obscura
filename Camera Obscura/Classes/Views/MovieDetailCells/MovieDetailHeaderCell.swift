@@ -16,6 +16,7 @@ class MovieDetailHeaderCell: UITableViewCell
     
     @IBOutlet weak var headerImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
     
     //MARK: Life-cycle
     
@@ -30,8 +31,13 @@ class MovieDetailHeaderCell: UITableViewCell
     
     //MARK: Initialization
     
-    func setBackgroundImage(forPosterURL posterURL: String)
+    func setCellData(forMovie movie: Movie)
     {
+        guard let posterURL = movie.posterURL, title = movie.title, plot = movie.plot else
+        {
+            return
+        }
+        
         RequestManager.sharedInstance.fetchImage(posterURL) { success, responseImage in
             
             guard let responseImage = responseImage where success else
@@ -41,5 +47,8 @@ class MovieDetailHeaderCell: UITableViewCell
             self.headerImageView.image = responseImage
             print("loaded movie poster image")
         }
+        
+        titleLabel.text     = title
+        subtitleLabel.text  = plot
     }
 }

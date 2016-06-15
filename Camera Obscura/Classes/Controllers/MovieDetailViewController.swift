@@ -12,19 +12,17 @@ class MovieDetailViewController: UIViewController
 {
     //MARK: Variables
     
-    var selectedMovie               : Movie!
+    var selectedMovie                       : Movie!
     
-    private let headerCellHeight    : CGFloat = 150
-    private let headerCellID        = "MovieDetailHeaderCell"
+    private var headerCellHeight            : CGFloat = 150
+    private let headerCellID                = "MovieDetailHeaderCell"
     
-    private let infoCellHeight      : CGFloat = 50
-    private let infoCellID          = "MovieDetailDescriptionCell"
+    private let infoCellHeight              : CGFloat = 30
+    private let infoCellID                  = "MovieDetailDescriptionCell"
+    private let emptyCellID                 = "emptyCell"
     
-    private let emptyCellID         = "emptyCell"
-    
-    private let loadingIndicator    = LoadingIndicator.createLoadingIndicator()
-    
-    private var didLoadInfo         = false
+    private let loadingIndicator            = LoadingIndicator.createLoadingIndicator()
+    private var didLoadInfo                 = false
     
     //MARK: IBOutlets
     
@@ -56,19 +54,13 @@ class MovieDetailViewController: UIViewController
         fetchMovieDetails()
     }
     
-//    override func viewWillAppear(animated: Bool)
-//    {
-//        super.viewWillAppear(animated)
-//        
-//        fetchMovieDetails()
-//    }
-//    
-//    override func viewDidAppear(animated: Bool)
-//    {
-//        super.viewDidAppear(animated)
-//        
-//        fetchMovieDetails()
-//    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        
+//        calculateCellHeights()
+    }
     
     //MARK: IBActions
     
@@ -112,16 +104,17 @@ class MovieDetailViewController: UIViewController
         }
         
 //        presentViewController(loadingIndicator, animated: true, completion: nil)
-//        
+
         RequestManager.sharedInstance.queryMovie(withImdbID: imdbID) { success, responseMovie in
             
             if let responseMovie = responseMovie where success
             {
                 self.selectedMovie  = responseMovie
                 self.didLoadInfo    = true
+                self.calculateCellHeights()
                 self.reloadTableView()
             }
-            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+//            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
         }
     }
     
@@ -130,21 +123,46 @@ class MovieDetailViewController: UIViewController
      */
     private func reloadTableView()
     {
-        var indexPaths = [NSIndexPath]()
-        
-        for index in 0 ..< selectedMovie.infoDictArray.count
-        {
-            let indexPath = NSIndexPath(forRow: index, inSection: MovieDetailTableSection.Info.rawValue)
-            indexPaths.append(indexPath)
-        }
+//        var indexPaths = [NSIndexPath]()
+//        
+//        for index in 0 ..< selectedMovie.infoDictArray.count
+//        {
+//            let indexPath = NSIndexPath(forRow: index, inSection: MovieDetailTableSection.Info.rawValue)
+//            indexPaths.append(indexPath)
+//        }
+//        
+//        dispatch_async(dispatch_get_main_queue(), {
+//            
+//            self.tableView.beginUpdates()
+//            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+//            self.tableView.endUpdates()
+//            
+//        })
         
         dispatch_async(dispatch_get_main_queue(), {
             
             self.tableView.beginUpdates()
-            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+            let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
+            self.tableView.reloadSections(sections, withRowAnimation: .Fade)
             self.tableView.endUpdates()
             
+//            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+            
         })
+    }
+    
+    private func calculateCellHeights()
+    {
+        let screenWidth = UIScreen.mainScreen().bounds.width
+        
+        guard let plot = selectedMovie.plot else
+        {
+            return
+        }
+        
+        let plotLabelCalculatedHeight = CGFloat(180) + plot.heightWithConstrainedWidth(screenWidth, font: UIFont(name: "HelveticaNeue-Regular", size: 19)!)
+        
+        headerCellHeight = headerCellHeight + plotLabelCalculatedHeight
     }
 }
 
@@ -231,14 +249,7 @@ extension MovieDetailViewController: UITableViewDataSource
                 }
                 
                 cell!.headerImageView.image = UIImage(color: AppColors.blueBackgroundColor)
-                cell!.titleLabel.text       = selectedMovie.title
-                
-                guard let posterURL = selectedMovie.posterURL else
-                {
-                    return cell!
-                }
-                
-                cell!.setBackgroundImage(forPosterURL: posterURL)
+                cell!.setCellData(forMovie: selectedMovie)
                 
                 return cell!
                 

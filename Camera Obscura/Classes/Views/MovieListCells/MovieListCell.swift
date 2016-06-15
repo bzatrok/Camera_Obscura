@@ -24,6 +24,7 @@ class MovieListCell: UITableViewCell
         super.awakeFromNib()
         
         backgroundImageView.contentMode = .ScaleAspectFill
+        backgroundImageView.alpha       = 0
     }
     
     //MARK: IBActions
@@ -32,14 +33,27 @@ class MovieListCell: UITableViewCell
     
     func setBackgroundImage(forPosterURL posterURL: String)
     {
+        animateBackgroundAlpha(toValue: 0)
+        
         RequestManager.sharedInstance.fetchImage(posterURL) { success, responseImage in
             
             guard let responseImage = responseImage where success else
             {
+                self.animateBackgroundAlpha(toValue: 1)
                 return
             }
             self.backgroundImageView.image = responseImage
-            print("loaded movie poster image")
+            self.animateBackgroundAlpha(toValue: 1)
+        }
+    }
+
+    private func animateBackgroundAlpha(toValue value: Double)
+    {
+        let floatValue = CGFloat(value)
+        
+        UIView.animateWithDuration(0.5) { 
+            
+            self.backgroundImageView.alpha = floatValue
         }
     }
 }
