@@ -33,8 +33,6 @@ class MovieListCell: UITableViewCell
     
     func setBackgroundImage(forPosterURL posterURL: String)
     {
-        animateBackgroundAlpha(toValue: 0)
-        
         RequestManager.sharedInstance.fetchImage(posterURL) { [weak self] success, responseImage in
             
             guard let responseImage = responseImage where success else
@@ -51,7 +49,7 @@ class MovieListCell: UITableViewCell
     {
         let floatValue = CGFloat(value)
         
-        UIView.animateWithDuration(0.5) { [weak self] in
+        UIView.animateWithDuration(0.3) { [weak self] in
             
             self?.backgroundImageView.alpha = floatValue
         }

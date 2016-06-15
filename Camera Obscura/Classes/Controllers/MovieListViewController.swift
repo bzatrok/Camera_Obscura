@@ -99,20 +99,26 @@ class MovieListViewController: UIViewController
      */
     private func fetchMovies(withSearchString searchString: String)
     {
-        moviesList = []
-        
-        presentViewController(loadingIndicator, animated: true, completion: nil)
+        if !loadingIndicator.isBeingPresented()
+        {
+            presentViewController(loadingIndicator, animated: true, completion: nil)
+        }
         
         RequestManager.sharedInstance.queryMovies(withTitleLike: searchString, forPage: currentPageToFetch) { success, responseMovieList in
             
-            self.isLoadingNextPage = false
-            
-            if let responseMovieList = responseMovieList
+            if let responseMovieList = responseMovieList where self.isLoadingNextPage
             {
                 self.moviesListCountBeforeUpdate    = self.moviesList.count
                 self.currentPageToFetch             += 1
                 self.moviesList.appendContentsOf(responseMovieList)
-                self.reloadTableView(tableViewToReload: self.tableView)
+                self.insertRowsToTableView()
+                self.isLoadingNextPage = false
+            }
+            else if let responseMovieList = responseMovieList
+            {
+                self.moviesList = []
+                self.moviesList.appendContentsOf(responseMovieList)
+                self.reloadTableView()
             }
             else
             {
@@ -122,16 +128,40 @@ class MovieListViewController: UIViewController
     }
     
     /**
-     Reloads tableview by inserting rows of movie results
+     Reloads tableview
      */
-    private func reloadTableView(tableViewToReload tableView: UITableView)
+    private func reloadTableView()
     {
         dispatch_async(dispatch_get_main_queue(), {
             
-            tableView.beginUpdates()
-            let sections = NSIndexSet(indexesInRange: NSMakeRange(0, tableView.numberOfSections))
-            tableView.reloadSections(sections, withRowAnimation: .Fade)
-            tableView.endUpdates()
+            self.tableView.beginUpdates()
+            let sections = NSIndexSet(indexesInRange: NSMakeRange(0, self.tableView.numberOfSections))
+            self.tableView.reloadSections(sections, withRowAnimation: .Fade)
+            self.tableView.endUpdates()
+            
+            self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
+            
+        })
+    }
+    
+    /**
+     Reloads tableview by inserting rows of movie results
+     */
+    private func insertRowsToTableView()
+    {
+        dispatch_async(dispatch_get_main_queue(), {
+            
+            var indexPaths = [NSIndexPath]()
+
+            for index in self.moviesListCountBeforeUpdate ..< self.moviesList.count
+            {
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                indexPaths.append(indexPath)
+            }
+
+            self.tableView.beginUpdates()
+            self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+            self.tableView.endUpdates()
             
             self.loadingIndicator.dismissViewControllerAnimated(true, completion: nil)
             
@@ -245,7 +275,6 @@ extension MovieListViewController: UITableViewDataSource
                 }
                 
                 cell!.backgroundImageView.image = UIImage()
-                
                 cell!.setBackgroundImage(forPosterURL: posterURL)
                 
                 return cell!

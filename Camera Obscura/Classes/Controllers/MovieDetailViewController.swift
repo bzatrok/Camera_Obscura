@@ -218,11 +218,11 @@ extension MovieDetailViewController: UITableViewDataSource
                 let infoDict    = selectedMovie.infoDictArray[indexPath.section - 1]
                 let keys        = infoDict.keys
                 
-                if let title = keys.first, subtitle = infoDict[title], font = UIFont(name: AppFonts.helveticaNeue, size: 18)
+                if let title = keys.first, subtitle = infoDict[title], font = UIFont(name: AppFonts.helveticaNeue, size: 15)
                 {
                     let screenWidth = UIScreen.mainScreen().bounds.width / 2
                     let labelHeight = subtitle.heightWithConstrainedWidth(screenWidth, font: font)
-                    return labelHeight
+                    return labelHeight + 10
                 }
                 
                 return infoCellHeight
